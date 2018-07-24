@@ -14,7 +14,8 @@ def l_bfgs_b(f,
              nparams,
              minstarts=2,
              maxstarts=10,
-             init_sd=2):
+             init_sd=2,
+             lb=0, ub=1):
     """ Minimizes the negative log-probability of data with respect to some parameters under function `f` using the L-BFGS-B algorithm.
 
     This function is specified for use with parallel CPU resources.
@@ -48,7 +49,14 @@ def l_bfgs_b(f,
     done    = False
     succeeded = False
     while not done:
-        xinit = np.random.normal(0, init_sd, size=nparams)
+        x0 = np.random.uniform(low=0,high=1)
+        x1 = np.random.uniform(low=0, high=20)
+        x2 = np.random.uniform(low=0, high=1)
+        x3 = np.random.uniform(low=-20, high=-20)
+        x4 = np.random.uniform(low=-20, high=20)
+        x5 = np.random.uniform(low=0, high=1)
+        xinit = np.array([x0, x1, x2, x3, x4, x5]).reshape(6)
+        # xinit = np.random.normal(0, init_sd, size=nparams)
         res = minimize(nlog_prob, xinit, method='L-BFGS-B')
 
         nstarts += 1
@@ -77,7 +85,10 @@ def mlepar(f,
            nparams,
            minstarts=2,
            maxstarts=10,
+           init_method = 'norm',
            init_sd=2,
+           lb = 0,
+           ub = 1,
            njobs=-1):
     """ Computes maximum likelihood estimates using parallel CPU resources.
 
