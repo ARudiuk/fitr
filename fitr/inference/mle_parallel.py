@@ -57,7 +57,10 @@ def l_bfgs_b(f,
         x5 = np.random.uniform(low=0, high=1)
         xinit = np.array([x0, x1, x2, x3, x4, x5]).reshape(6)
         # xinit = np.random.normal(0, init_sd, size=nparams)
-        res = minimize(nlog_prob, xinit, method='L-BFGS-B')
+        res = minimize(nlog_prob, xinit, method='L-BFGS-B',
+                       bounds=((0,1), (0,20), (0,1),
+                               (-20,20), (-20,20), 
+                                (0,1)))
 
         nstarts += 1
         fevals  += res.nfev
